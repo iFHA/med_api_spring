@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: 'mysql:8.2.0'
+    environment:
+      - 'MYSQL_DATABASE=db'
+      - 'MYSQL_PASSWORD=pswd'
+      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_USER=spring'
+    ports:
+      - '9306:3306'
