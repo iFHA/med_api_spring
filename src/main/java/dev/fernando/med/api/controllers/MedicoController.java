@@ -8,6 +8,8 @@ import dev.fernando.med.api.models.medico.dtos.ListagemMedicoDTO;
 import dev.fernando.med.api.repositories.MedicoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +34,10 @@ public class MedicoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ListagemMedicoDTO>> getAll() {
+    public ResponseEntity<Page<ListagemMedicoDTO>> getAll(Pageable pageable) {
         return ResponseEntity.ok(
-                this.repository.findAll()
-                        .stream()
-                        .map(this.medicoConverter::toListagemMedicoDTO)
-                        .sorted(Comparator.comparing(ListagemMedicoDTO::nome))
-                        .toList()
+                this.repository.findAll(pageable)
+                .map(this.medicoConverter::toListagemMedicoDTO)
         );
     }
 }
