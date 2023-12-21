@@ -1,6 +1,5 @@
 package dev.fernando.med.api.models.medico;
 
-import dev.fernando.med.api.models.endereco.Endereco;
 import dev.fernando.med.api.models.endereco.EnderecoConverter;
 import dev.fernando.med.api.models.medico.dtos.DadosMedicoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ public class MedicoConverter {
                 null,
                 dto.nome(),
                 dto.email(),
+                dto.telefone(),
                 dto.crm(),
                 dto.especialidade(),
                 this.enderecoConverter.fromDTO(dto.endereco()));
