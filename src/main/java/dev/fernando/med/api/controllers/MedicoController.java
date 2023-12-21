@@ -4,15 +4,16 @@ import dev.fernando.med.api.models.endereco.Endereco;
 import dev.fernando.med.api.models.medico.Medico;
 import dev.fernando.med.api.models.medico.MedicoConverter;
 import dev.fernando.med.api.models.medico.dtos.DadosMedicoDTO;
+import dev.fernando.med.api.models.medico.dtos.ListagemMedicoDTO;
 import dev.fernando.med.api.repositories.MedicoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Comparator;
+import java.util.List;
 
 @RestController
 @RequestMapping("medicos")
@@ -28,5 +29,16 @@ public class MedicoController {
         Medico m = this.medicoConverter.fromDTO(dadosMedico);
         this.repository.save(m);
         return ResponseEntity.ok(m);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ListagemMedicoDTO>> getAll() {
+        return ResponseEntity.ok(
+                this.repository.findAll()
+                        .stream()
+                        .map(this.medicoConverter::toListagemMedicoDTO)
+                        .sorted(Comparator.comparing(ListagemMedicoDTO::nome))
+                        .toList()
+        );
     }
 }
