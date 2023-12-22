@@ -5,6 +5,9 @@ import dev.fernando.med.api.models.endereco.Endereco;
 import dev.fernando.med.api.models.medico.dtos.DadosAtualizacaoMedicoDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Where;
 
 @Table(name = "medicos")
 @Entity(name = "Medico")
@@ -12,6 +15,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLDelete(sql = "update medicos set ativo=0 where id = ?")
+@SQLRestriction("ativo=1")
 public class Medico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
