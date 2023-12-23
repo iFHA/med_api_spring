@@ -2,6 +2,7 @@ package dev.fernando.med.api.models.medico;
 
 import dev.fernando.med.api.models.endereco.EnderecoConverter;
 import dev.fernando.med.api.models.medico.dtos.DadosCadastroMedicoDTO;
+import dev.fernando.med.api.models.medico.dtos.DadosDetalhamentoMedicoDTO;
 import dev.fernando.med.api.models.medico.dtos.ListagemMedicoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,5 +29,9 @@ public class MedicoConverter {
                 medico.getCrm(),
                 medico.getEspecialidade()
         );
+    }
+
+    public DadosDetalhamentoMedicoDTO toDadosDetalhamentoMedicoDTO(Medico medico) {
+        return new DadosDetalhamentoMedicoDTO(medico.getId(), medico.getNome(), medico.getEmail(), medico.getCrm(), medico.getEspecialidade(), medico.getEndereco());
     }
 }

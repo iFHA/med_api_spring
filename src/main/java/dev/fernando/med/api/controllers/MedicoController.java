@@ -1,9 +1,11 @@
 package dev.fernando.med.api.controllers;
 
+import dev.fernando.med.api.exceptions.MedicoNotFoundException;
 import dev.fernando.med.api.models.medico.Medico;
 import dev.fernando.med.api.models.medico.MedicoConverter;
 import dev.fernando.med.api.models.medico.dtos.DadosAtualizacaoMedicoDTO;
 import dev.fernando.med.api.models.medico.dtos.DadosCadastroMedicoDTO;
+import dev.fernando.med.api.models.medico.dtos.DadosDetalhamentoMedicoDTO;
 import dev.fernando.med.api.models.medico.dtos.ListagemMedicoDTO;
 import dev.fernando.med.api.repositories.MedicoRepository;
 import jakarta.validation.Valid;
@@ -13,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("medicos")
@@ -24,10 +29,26 @@ public class MedicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Medico> cadastrar(@Valid @RequestBody DadosCadastroMedicoDTO dadosMedico) {
+    public ResponseEntity<DadosDetalhamentoMedicoDTO> cadastrar(
+            @Valid @RequestBody DadosCadastroMedicoDTO dadosMedico,
+            UriComponentsBuilder uriBuilder
+    ) {
         Medico m = this.medicoConverter.fromDTO(dadosMedico);
         this.repository.save(m);
-        return ResponseEntity.ok(m);
+        DadosDetalhamentoMedicoDTO dto = this.medicoConverter.toDadosDetalhamentoMedicoDTO(m);
+        return ResponseEntity.created(
+                uriBuilder
+                        .path("/medicos/{id}")
+                        .buildAndExpand(dto.id())
+                        .toUri()
+                )
+                .body(dto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DadosDetalhamentoMedicoDTO> getById(@PathVariable Long id) {
+        DadosDetalhamentoMedicoDTO dto = this.medicoConverter.toDadosDetalhamentoMedicoDTO(this.repository.findById(id).orElseThrow(() -> new MedicoNotFoundException(id)));
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping
@@ -40,11 +61,11 @@ public class MedicoController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<Void> atualizar(@RequestBody @Valid DadosAtualizacaoMedicoDTO dto, @PathVariable Long id) {
+    public ResponseEntity<DadosDetalhamentoMedicoDTO> atualizar(@RequestBody @Valid DadosAtualizacaoMedicoDTO dto, @PathVariable Long id) {
         Medico m = this.repository.getReferenceById(id);
         m.atualizarInformacoes(dto);
-        this.repository.save(m);
-        return ResponseEntity.ok().build();
+        var dados = this.medicoConverter.toDadosDetalhamentoMedicoDTO(this.repository.save(m));
+        return ResponseEntity.ok(dados);
     }
     @DeleteMapping("/{id}")
     @Transactional
