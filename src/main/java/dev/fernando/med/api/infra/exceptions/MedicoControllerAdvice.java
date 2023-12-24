@@ -1,4 +1,4 @@
-package dev.fernando.med.api.infra;
+package dev.fernando.med.api.infra.exceptions;
 
 import dev.fernando.med.api.exceptions.MedicoNotFoundException;
 import dev.fernando.med.api.models.ErroApi;
