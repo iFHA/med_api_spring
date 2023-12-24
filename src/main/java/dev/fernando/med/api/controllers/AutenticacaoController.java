@@ -1,5 +1,6 @@
 package dev.fernando.med.api.controllers;
 
+import dev.fernando.med.api.infra.security.DadosTokenJWT;
 import dev.fernando.med.api.infra.security.TokenService;
 import dev.fernando.med.api.models.usuario.Usuario;
 import dev.fernando.med.api.models.usuario.dtos.DadosAutenticacaoDTO;
@@ -21,10 +22,10 @@ public class AutenticacaoController {
     @Autowired
     private TokenService tokenService;
     @PostMapping
-    public ResponseEntity<String> efetuarLogin(@RequestBody @Valid DadosAutenticacaoDTO dto){
-        var token = new UsernamePasswordAuthenticationToken(dto.login(), dto.senha());
-        var authentication = this.authenticationManager.authenticate(token);
-
-        return ResponseEntity.ok(tokenService.gerarToken((Usuario) authentication.getPrincipal()));
+    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @Valid DadosAutenticacaoDTO dto){
+        var authorizationToken = new UsernamePasswordAuthenticationToken(dto.login(), dto.senha());
+        var authentication = this.authenticationManager.authenticate(authorizationToken);
+        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 }
