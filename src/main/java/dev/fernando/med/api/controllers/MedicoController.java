@@ -1,6 +1,6 @@
 package dev.fernando.med.api.controllers;
 
-import dev.fernando.med.api.exceptions.MedicoNotFoundException;
+import dev.fernando.med.api.exceptions.RecordNotFoundException;
 import dev.fernando.med.api.models.medico.Medico;
 import dev.fernando.med.api.models.medico.MedicoConverter;
 import dev.fernando.med.api.models.medico.dtos.DadosAtualizacaoMedicoDTO;
@@ -16,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("medicos")
@@ -47,7 +45,7 @@ public class MedicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalhamentoMedicoDTO> getById(@PathVariable Long id) {
-        DadosDetalhamentoMedicoDTO dto = this.medicoConverter.toDadosDetalhamentoMedicoDTO(this.repository.findById(id).orElseThrow(() -> new MedicoNotFoundException(id)));
+        DadosDetalhamentoMedicoDTO dto = this.medicoConverter.toDadosDetalhamentoMedicoDTO(this.repository.findById(id).orElseThrow(() -> new RecordNotFoundException(id)));
         return ResponseEntity.ok(dto);
     }
 
