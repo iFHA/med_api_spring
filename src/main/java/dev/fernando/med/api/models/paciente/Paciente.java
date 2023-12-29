@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Table(name = "pacientes")
 @Entity(name = "Paciente")
@@ -14,6 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLDelete(sql = "update pacientes set ativo=0 where id = ?")
+@SQLRestriction("ativo = 1")
 public class Paciente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
