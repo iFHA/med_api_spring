@@ -24,7 +24,12 @@ public class SecurityConfigurations {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/login"))
+                        req -> req.requestMatchers(
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/login"),
+                                AntPathRequestMatcher.antMatcher("/v3/api-docs/**" ),
+                                AntPathRequestMatcher.antMatcher("/swagger-ui.html" ),
+                                AntPathRequestMatcher.antMatcher("/swagger-ui/**" )
+                                )
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
