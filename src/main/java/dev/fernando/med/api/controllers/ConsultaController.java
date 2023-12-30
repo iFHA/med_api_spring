@@ -4,6 +4,7 @@ import dev.fernando.med.api.domain.consulta.dtos.AgendamentoConsultaDTO;
 import dev.fernando.med.api.domain.consulta.dtos.CancelamentoConsultaDTO;
 import dev.fernando.med.api.domain.consulta.dtos.DetalhamentoConsultaDTO;
 import dev.fernando.med.api.services.AgendaDeConsultasService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("consultas")
+@SecurityRequirement(name = "bearer-key")
 public class ConsultaController {
     @Autowired
     private AgendaDeConsultasService agenda;
