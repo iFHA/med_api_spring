@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
@@ -19,16 +20,22 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private HandlerExceptionResolver handlerExceptionResolver;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String tokenJWT = recuperarToken(request);
-        if(tokenJWT != null) {
-            var subject = this.tokenService.getSubject(tokenJWT);
-            var usuario = usuarioRepository.findByLogin(subject);
-            var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication); // fazendo login do usuário no contexto de segurança do spring
+        try {
+            String tokenJWT = recuperarToken(request);
+            if (tokenJWT != null) {
+                var subject = this.tokenService.getSubject(tokenJWT);
+                var usuario = usuarioRepository.findByLogin(subject);
+                var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication); // fazendo login do usuário no contexto de segurança do spring
+            }
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            handlerExceptionResolver.resolveException(request, response, null, e);
         }
-        filterChain.doFilter(request, response);
     }
 
     private String recuperarToken(HttpServletRequest request) {

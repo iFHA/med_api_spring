@@ -1,11 +1,11 @@
 package dev.fernando.med.api.controllers;
 
 import dev.fernando.med.api.exceptions.RecordNotFoundException;
-import dev.fernando.med.api.models.paciente.Paciente;
-import dev.fernando.med.api.models.paciente.PacienteConverter;
-import dev.fernando.med.api.models.paciente.dtos.DadosAtualizacaoPacienteDTO;
-import dev.fernando.med.api.models.paciente.dtos.DadosCadastroPacienteDTO;
-import dev.fernando.med.api.models.paciente.dtos.PacienteDTO;
+import dev.fernando.med.api.domain.paciente.Paciente;
+import dev.fernando.med.api.domain.paciente.PacienteConverter;
+import dev.fernando.med.api.domain.paciente.dtos.DadosAtualizacaoPacienteDTO;
+import dev.fernando.med.api.domain.paciente.dtos.DadosCadastroPacienteDTO;
+import dev.fernando.med.api.domain.paciente.dtos.PacienteDTO;
 import dev.fernando.med.api.repositories.PacienteRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pacientes")

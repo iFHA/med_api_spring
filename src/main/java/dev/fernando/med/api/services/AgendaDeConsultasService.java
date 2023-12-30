@@ -1,12 +1,13 @@
 package dev.fernando.med.api.services;
 
 import dev.fernando.med.api.exceptions.ValidacaoException;
-import dev.fernando.med.api.models.consulta.Consulta;
-import dev.fernando.med.api.models.consulta.ConsultaMapper;
-import dev.fernando.med.api.models.consulta.dtos.AgendamentoConsultaDTO;
-import dev.fernando.med.api.models.consulta.validacoes.ValidadorAgendamentoDeConsulta;
-import dev.fernando.med.api.models.medico.Medico;
-import dev.fernando.med.api.models.paciente.Paciente;
+import dev.fernando.med.api.domain.consulta.Consulta;
+import dev.fernando.med.api.domain.consulta.ConsultaMapper;
+import dev.fernando.med.api.domain.consulta.dtos.AgendamentoConsultaDTO;
+import dev.fernando.med.api.domain.consulta.dtos.DetalhamentoConsultaDTO;
+import dev.fernando.med.api.domain.consulta.validacoes.ValidadorAgendamentoDeConsulta;
+import dev.fernando.med.api.domain.medico.Medico;
+import dev.fernando.med.api.domain.paciente.Paciente;
 import dev.fernando.med.api.repositories.ConsultaRepository;
 import dev.fernando.med.api.repositories.MedicoRepository;
 import dev.fernando.med.api.repositories.PacienteRepository;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Service
 public class AgendaDeConsultasService {
@@ -29,7 +29,7 @@ public class AgendaDeConsultasService {
     private ConsultaMapper mapper;
     @Autowired
     private List<ValidadorAgendamentoDeConsulta> validadores;
-    public void agendar(AgendamentoConsultaDTO dto) {
+    public DetalhamentoConsultaDTO agendar(AgendamentoConsultaDTO dto) {
         if(!pacienteRepository.existsById(dto.pacienteId())) {
             throw new ValidacaoException("Paciente de id(%d) não encontrado".formatted(dto.pacienteId()));
         }
@@ -43,6 +43,7 @@ public class AgendaDeConsultasService {
         Paciente paciente = pacienteRepository.getReferenceById(dto.pacienteId());
         Consulta consulta = new Consulta(null, medico, paciente, dto.data());
         repository.save(consulta);
+        return mapper.todetalhamentoConsultaDTO(consulta);
     }
 
     private Medico escolherMedico(AgendamentoConsultaDTO dto) {

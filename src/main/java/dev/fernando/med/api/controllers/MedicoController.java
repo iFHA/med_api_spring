@@ -1,12 +1,12 @@
 package dev.fernando.med.api.controllers;
 
 import dev.fernando.med.api.exceptions.RecordNotFoundException;
-import dev.fernando.med.api.models.medico.Medico;
-import dev.fernando.med.api.models.medico.MedicoConverter;
-import dev.fernando.med.api.models.medico.dtos.DadosAtualizacaoMedicoDTO;
-import dev.fernando.med.api.models.medico.dtos.DadosCadastroMedicoDTO;
-import dev.fernando.med.api.models.medico.dtos.DadosDetalhamentoMedicoDTO;
-import dev.fernando.med.api.models.medico.dtos.ListagemMedicoDTO;
+import dev.fernando.med.api.domain.medico.Medico;
+import dev.fernando.med.api.domain.medico.MedicoConverter;
+import dev.fernando.med.api.domain.medico.dtos.DadosAtualizacaoMedicoDTO;
+import dev.fernando.med.api.domain.medico.dtos.DadosCadastroMedicoDTO;
+import dev.fernando.med.api.domain.medico.dtos.DadosDetalhamentoMedicoDTO;
+import dev.fernando.med.api.domain.medico.dtos.ListagemMedicoDTO;
 import dev.fernando.med.api.repositories.MedicoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

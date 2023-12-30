@@ -4,9 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.JWTVerifier;
-import dev.fernando.med.api.models.usuario.Usuario;
+import dev.fernando.med.api.domain.usuario.Usuario;
+import dev.fernando.med.api.exceptions.ValidacaoException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +41,7 @@ public class TokenService {
                     .verify(tokenJWT)
                     .getSubject();
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Token JWT inválido ou expirado!", exception);
+            throw new ValidacaoException("Token JWT inválido ou expirado!");
         }
     }
 

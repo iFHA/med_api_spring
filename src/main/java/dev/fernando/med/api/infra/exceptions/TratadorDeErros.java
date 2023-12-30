@@ -1,7 +1,8 @@
 package dev.fernando.med.api.infra.exceptions;
 
 import dev.fernando.med.api.exceptions.RecordNotFoundException;
-import dev.fernando.med.api.models.ErroApi;
+import dev.fernando.med.api.exceptions.ValidacaoException;
+import dev.fernando.med.api.domain.ErroApi;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -26,6 +27,11 @@ public class TratadorDeErros {
                 .map(DadosErroValidacao::new)
                 .toList();
         return ResponseEntity.badRequest().body(erros);
+    }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity<ErroApi> handleValidacaoException(ValidacaoException e) {
+        return ResponseEntity.badRequest().body(new ErroApi(e.getMessage()));
     }
 
     private record DadosErroValidacao(String campo, String mensagem) {

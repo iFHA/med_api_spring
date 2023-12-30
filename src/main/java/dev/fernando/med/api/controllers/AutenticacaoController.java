@@ -2,8 +2,8 @@ package dev.fernando.med.api.controllers;
 
 import dev.fernando.med.api.infra.security.DadosTokenJWT;
 import dev.fernando.med.api.infra.security.TokenService;
-import dev.fernando.med.api.models.usuario.Usuario;
-import dev.fernando.med.api.models.usuario.dtos.DadosAutenticacaoDTO;
+import dev.fernando.med.api.domain.usuario.Usuario;
+import dev.fernando.med.api.domain.usuario.dtos.DadosAutenticacaoDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package dev.fernando.med.api.repositories;
 
-import dev.fernando.med.api.models.medico.Especialidade;
-import dev.fernando.med.api.models.medico.Medico;
+import dev.fernando.med.api.domain.medico.Especialidade;
+import dev.fernando.med.api.domain.medico.Medico;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,7 +15,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
             where
             especialidade = :especialidade
             and m.id not in (
-                select c.medicoId from Consulta c where c.data = :data
+                select c.medico.id from Consulta c where c.data = :data
             )
             order by rand()
             limit 1
@@ -23,7 +23,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
     Optional<Medico> escolherMedicoAleatorioEspecialistaEmELivreNaData(Especialidade especialidade, LocalDateTime data);
     @Query("""
             select m.ativo from Medico m
-            where m.id = :medicoId 
+            where m.id = :medicoId
             """)
     Boolean findAtivoById(Long medicoId);
 }

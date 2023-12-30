@@ -1,7 +1,7 @@
 package dev.fernando.med.api.controllers;
 
-import dev.fernando.med.api.models.consulta.dtos.AgendamentoConsultaDTO;
-import dev.fernando.med.api.models.consulta.dtos.DetalhamentoConsultaDTO;
+import dev.fernando.med.api.domain.consulta.dtos.AgendamentoConsultaDTO;
+import dev.fernando.med.api.domain.consulta.dtos.DetalhamentoConsultaDTO;
 import dev.fernando.med.api.services.AgendaDeConsultasService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ public class ConsultaController {
     private AgendaDeConsultasService agenda;
     @PostMapping
     public ResponseEntity<DetalhamentoConsultaDTO> agendar(@RequestBody @Valid AgendamentoConsultaDTO dto) {
-        agenda.agendar(dto);
-        return ResponseEntity.ok(new DetalhamentoConsultaDTO(null,null,null,null));
+        return ResponseEntity.ok(agenda.agendar(dto));
     }
 }

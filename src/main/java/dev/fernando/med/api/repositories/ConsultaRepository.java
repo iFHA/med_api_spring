@@ -1,8 +1,7 @@
 package dev.fernando.med.api.repositories;
 
-import dev.fernando.med.api.models.consulta.Consulta;
+import dev.fernando.med.api.domain.consulta.Consulta;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 
