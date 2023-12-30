@@ -1,5 +1,7 @@
 package dev.fernando.med.api.services;
 
+import dev.fernando.med.api.domain.consulta.dtos.CancelamentoConsultaDTO;
+import dev.fernando.med.api.domain.consulta.validacoes.ValidadorCancelamentoConsulta;
 import dev.fernando.med.api.exceptions.ValidacaoException;
 import dev.fernando.med.api.domain.consulta.Consulta;
 import dev.fernando.med.api.domain.consulta.ConsultaMapper;
@@ -29,6 +31,8 @@ public class AgendaDeConsultasService {
     private ConsultaMapper mapper;
     @Autowired
     private List<ValidadorAgendamentoDeConsulta> validadores;
+    @Autowired
+    private List<ValidadorCancelamentoConsulta> validadoresCancelamento;
     public DetalhamentoConsultaDTO agendar(AgendamentoConsultaDTO dto) {
         if(!pacienteRepository.existsById(dto.pacienteId())) {
             throw new ValidacaoException("Paciente de id(%d) não encontrado".formatted(dto.pacienteId()));
@@ -41,9 +45,18 @@ public class AgendaDeConsultasService {
         validadores.forEach(validador-> validador.validar(dto));
 
         Paciente paciente = pacienteRepository.getReferenceById(dto.pacienteId());
-        Consulta consulta = new Consulta(null, medico, paciente, dto.data());
+        Consulta consulta = new Consulta(null, medico, paciente, dto.data(), null, null, null);
         repository.save(consulta);
         return mapper.todetalhamentoConsultaDTO(consulta);
+    }
+
+    public void cancelarAgendamento(CancelamentoConsultaDTO dto) {
+        Consulta consulta = repository
+                .findById(dto.consultaId())
+                .orElseThrow(() -> new ValidacaoException("Consulta(%d) não encontrada".formatted(dto.consultaId())));
+        mapper.atualizaDadosCancelamentoConsulta(consulta, dto);
+        validadoresCancelamento.forEach(validador-> validador.validar(consulta));
+        repository.save(consulta);
     }
 
     private Medico escolherMedico(AgendamentoConsultaDTO dto) {
