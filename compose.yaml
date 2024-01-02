@@ -6,5 +6,7 @@ services:
       - 'MYSQL_PASSWORD=pswd'
       - 'MYSQL_ROOT_PASSWORD=verysecret'
       - 'MYSQL_USER=spring'
+    volumes:
+      - ./docker/provision/mysql/init:/docker-entrypoint-initdb.d
     ports:
       - '9306:3306'
